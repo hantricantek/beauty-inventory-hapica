@@ -16,6 +16,11 @@ new class extends Component
     {
         $this->dispatch('edit-product', id: $id);
     }
+
+    public function delete($id)
+    {
+        $this->dispatch('confirm-delete', id: $id);
+    }
 };
 
 ?>
@@ -32,7 +37,7 @@ new class extends Component
 
     <flux:separator variant="subtle" />
 
-    <!-- Tombol Add Product -->
+    <!-- Add Product -->
     <flux:modal.trigger name="create-product">
         <flux:button variant="primary" icon="plus">
             Add Product
@@ -42,10 +47,10 @@ new class extends Component
     <!-- Modal Create -->
     <livewire:product.create />
 
-    <!-- Modal Edit -->
+    <!-- Modal Edit & Delete -->
     <livewire:product.edit />
 
-    <!-- Tabel Product -->
+    <!-- Table -->
     <div class="overflow-x-auto">
 
         <flux:table>
@@ -105,7 +110,7 @@ new class extends Component
                         </flux:table.cell>
 
                         <flux:table.cell>
-                            Rp {{ number_format($product->price) }}
+                            Rp {{ number_format($product->price, 0, ',', '.') }}
                         </flux:table.cell>
 
                         <flux:table.cell>
@@ -113,25 +118,48 @@ new class extends Component
                         </flux:table.cell>
 
                         <flux:table.cell>
+
                             <flux:dropdown>
+
                                 <flux:button
                                     variant="ghost"
                                     size="sm"
                                     icon="ellipsis-horizontal"
                                 />
+
                                 <flux:menu>
+
                                     <flux:menu.item
                                         icon="pencil"
                                         wire:click="edit({{ $product->id }})"
                                     >
                                         Edit
                                     </flux:menu.item>
+
+                                    <flux:menu.separator />
+
+                                    <flux:menu.item
+                                        variant="danger"
+                                        icon="trash"
+                                        wire:click="delete({{ $product->id }})"
+                                    >
+                                        Delete
+                                    </flux:menu.item>
+
                                 </flux:menu>
+
                             </flux:dropdown>
+
                         </flux:table.cell>
+
                     </flux:table.row>
+
                 @endforeach
+
             </flux:table.rows>
+
         </flux:table>
+
     </div>
+
 </div>

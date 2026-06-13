@@ -13,18 +13,50 @@ new class extends Component
     public function editProduct($id)
     {
         $product = Product::find($id);
+
         $this->form->setProduct($product);
+
         Flux::modal('edit-product')->show();
     }
 
     public function updateProduct()
     {
         $this->form->update();
+
         Flux::modal('edit-product')->close();
+
         session()->flash(
             'success',
             'Product updated successfully'
         );
+
+        $this->redirectRoute(
+            'product.index',
+            navigate: true
+        );
+    }
+
+    #[On('confirm-delete')]
+    public function confirmDelete($id)
+    {
+        $product = Product::find($id);
+
+        $this->form->setProduct($product);
+
+        Flux::modal('delete-product')->show();
+    }
+
+    public function deleteProduct()
+    {
+        $this->form->delete();
+
+        Flux::modal('delete-product')->close();
+
+        session()->flash(
+            'success',
+            'Product deleted successfully'
+        );
+
         $this->redirectRoute(
             'product.index',
             navigate: true
@@ -34,6 +66,7 @@ new class extends Component
     public function resetForm()
     {
         $this->resetValidation();
+
         $this->form->reset();
     }
 };
@@ -42,6 +75,7 @@ new class extends Component
 
 <div>
 
+    <!-- Modal Edit -->
     <flux:modal
         name="edit-product"
         class="md:w-150"
@@ -105,6 +139,7 @@ new class extends Component
                 <option value="Out of Stock">
                     Out of Stock
                 </option>
+
             </flux:select>
 
             <div class="flex justify-end gap-3">
@@ -121,6 +156,51 @@ new class extends Component
                 >
                     Update
                 </flux:button>
+
+            </div>
+
+        </form>
+
+    </flux:modal>
+
+
+    <!-- Modal Delete -->
+    <flux:modal
+        name="delete-product"
+        class="md:w-100"
+        x-on:close="$wire.resetForm()"
+    >
+
+        <form wire:submit.prevent="deleteProduct">
+
+            <div class="space-y-4">
+
+                <flux:heading size="lg">
+                    Delete Product
+                </flux:heading>
+
+                <flux:text>
+                    Are you sure you want to delete this product?
+                </flux:text>
+
+                <div class="flex justify-end gap-3">
+
+                    <flux:modal.close>
+
+                        <flux:button variant="outline">
+                            Cancel
+                        </flux:button>
+
+                    </flux:modal.close>
+
+                    <flux:button
+                        type="submit"
+                        variant="danger"
+                    >
+                        Delete
+                    </flux:button>
+
+                </div>
 
             </div>
 

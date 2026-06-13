@@ -41,8 +41,14 @@ class ProductForm extends Form
             ])
         );
 
+    }
+    public function delete()
+    {
+        $this->product->delete();
+
         $this->reset();
     }
+
 
     public function setProduct(Product $product): void
     {
