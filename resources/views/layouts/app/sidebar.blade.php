@@ -20,6 +20,10 @@
                         {{ __('Products') }}
                     </flux:sidebar.item>
 
+                    <flux:sidebar.item icon="home" :href="route('supplier.index')" :current="request()->routeIs('supplier.index')" wire:navigate>
+                        {{ __('supplier') }}
+                    </flux:sidebar.item>
+
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
