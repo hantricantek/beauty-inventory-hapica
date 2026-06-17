@@ -6,10 +6,19 @@ use App\Models\Product;
 
 new class extends Component
 {
+    public string $search = '';
+
     #[Computed]
     public function products()
     {
-        return Product::latest()->get();
+        return Product::query()
+            ->where(
+                'product_name',
+                'like',
+                '%' . $this->search . '%'
+            )
+            ->latest()
+            ->get();
     }
 
     public function edit($id)
@@ -39,7 +48,10 @@ new class extends Component
 
     <!-- Add Product -->
     <flux:modal.trigger name="create-product">
-        <flux:button variant="primary" icon="plus">
+        <flux:button
+            variant="primary"
+            icon="plus"
+        >
             Add Product
         </flux:button>
     </flux:modal.trigger>
@@ -49,6 +61,12 @@ new class extends Component
 
     <!-- Modal Edit & Delete -->
     <livewire:product.edit />
+
+    <!-- Search -->
+    <flux:input
+        wire:model.live="search"
+        placeholder="Search product..."
+    />
 
     <!-- Table -->
     <div class="overflow-x-auto">
