@@ -9,11 +9,14 @@ Route::view('/', 'welcome')->name('home');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
 
-    
-    // ✅ SUPPLIERS (INI FIX UTAMA)
-    Route::get('/suppliers', SupplierIndex::class)
+    Route::livewire('/products', 'pages::product.index')
         ->middleware(['auth'])
-        ->name('supplier.index');
+        ->name('product.index');
+
+     Route::livewire('/suppliers', 'pages::supplier.index')
+    ->middleware(['auth'])
+    ->name('supplier.index');
+
 });
 
 Route::livewire('/products', 'pages::product.index')
