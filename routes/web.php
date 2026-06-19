@@ -8,7 +8,6 @@ Route::view('/', 'welcome')->name('home');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
 
-    // ✅ PRODUCTS (kalau masih pakai style lama, biarkan dulu)
     Route::livewire('/products', 'pages::product.index')
         ->middleware(['auth'])
         ->name('product.index');
