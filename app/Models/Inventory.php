@@ -4,24 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Inventory extends Model
 {
-    protected $fillable = [
+     protected $fillable = [
         'product_name',
-        'category',
-        'brand',
         'stock',
-        'price',
-        'status',
+        'unit'
     ];
 
-    // Relasi ke tabel stock_ins
     public function stockIns()
     {
         return $this->hasMany(StockIn::class);
     }
 
-    // Relasi ke tabel stock_outs
     public function stockOuts()
     {
         return $this->hasMany(StockOut::class);
