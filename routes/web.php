@@ -1,13 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StockInController;
 use App\Http\Controllers\InventoryController;
+use App\Livewire\Suppliers\Index as SupplierIndex;
 
 Route::view('/', 'welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
+
+    
+    // ✅ SUPPLIERS (INI FIX UTAMA)
+    Route::get('/suppliers', SupplierIndex::class)
+        ->middleware(['auth'])
+        ->name('supplier.index');
 });
 
 Route::livewire('/products', 'pages::product.index')
