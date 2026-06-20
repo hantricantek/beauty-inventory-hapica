@@ -6,19 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Inventory extends Model
 {
-     protected $fillable = [
+    protected $fillable = [
         'product_name',
         'stock',
-        'unit'
+        'unit',
     ];
-
-    public function stockIns()
-    {
-        return $this->hasMany(StockIn::class);
-    }
-
-    public function stockOuts()
-    {
-        return $this->hasMany(StockOut::class);
-    }
 }

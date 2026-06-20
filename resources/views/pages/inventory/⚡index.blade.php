@@ -1,8 +1,8 @@
 <?php
 
 use Livewire\Component;
-use Livewire\Attributes\Computed;
 use Livewire\WithPagination;
+use Livewire\Attributes\Computed;
 use App\Models\Inventory;
 
 new class extends Component
@@ -11,30 +11,25 @@ new class extends Component
 
     public $search = '';
 
-    public $stockFilter = '';
-
-    public $sortBy = 'created_at';
-
-    public $sortDirection = 'desc';
-    public $inventoryId = null;
-
     public $product_name = '';
 
     public $stock = 0;
 
     public $unit = '';
 
-    public function sort($column)
+    public $inventoryId = null;
+
+    public $sortBy = 'created_at';
+
+    public $sortDirection = 'desc';
+
+    protected function rules()
     {
-        if ($this->sortBy === $column) {
-            $this->sortDirection =
-                $this->sortDirection === 'asc'
-                ? 'desc'
-                : 'asc';
-        } else {
-            $this->sortBy = $column;
-            $this->sortDirection = 'asc';
-        }
+        return [
+            'product_name' => 'required|min:3',
+            'stock' => 'required|integer|min:0',
+            'unit' => 'nullable',
+        ];
     }
 
     #[Computed]
@@ -48,20 +43,8 @@ new class extends Component
                 $query->where(
                     'product_name',
                     'like',
-                    '%' . $this->search . '%'
+                    "%{$this->search}%"
                 )
-            )
-
-            ->when(
-                $this->stockFilter === 'available',
-                fn ($query) =>
-                $query->where('stock', '>', 0)
-            )
-
-            ->when(
-                $this->stockFilter === 'empty',
-                fn ($query) =>
-                $query->where('stock', '=', 0)
             )
 
             ->orderBy(
@@ -72,84 +55,108 @@ new class extends Component
             ->paginate(10);
     }
 
-    public function edit($id)
-{
-    $inventory = Inventory::findOrFail($id);
+    public function sort($column)
+    {
+        if ($this->sortBy === $column) {
 
-    $this->inventoryId = $inventory->id;
+            $this->sortDirection =
+                $this->sortDirection === 'asc'
+                ? 'desc'
+                : 'asc';
 
-    $this->product_name = $inventory->product_name;
+        } else {
 
-    $this->stock = $inventory->stock;
+            $this->sortBy = $column;
 
-    $this->unit = $inventory->unit;
-}
+            $this->sortDirection = 'asc';
+        }
+    }
+
     public function save()
-{
-    $this->validate([
-        'product_name' => 'required',
-        'stock' => 'required|integer|min:0',
-        'unit' => 'nullable',
-    ]);
+    {
+        $this->validate();
 
-    Inventory::create([
-        'product_name' => $this->product_name,
-        'stock' => $this->stock,
-        'unit' => $this->unit,
-    ]);
+        Inventory::create([
+            'product_name' => $this->product_name,
+            'stock' => $this->stock,
+            'unit' => $this->unit,
+        ]);
 
-    $this->reset([
-        'product_name',
-        'stock',
-        'unit',
-    ]);
+        $this->resetForm();
 
-    session()->flash(
-        'success',
-        'Inventory berhasil ditambahkan'
-    );
-}
+        session()->flash(
+            'success',
+            'Inventory berhasil ditambahkan'
+        );
+    }
 
-public function update()
-{
-    Inventory::findOrFail(
-        $this->inventoryId
-    )->update([
-        'product_name' => $this->product_name,
-        'stock' => $this->stock,
-        'unit' => $this->unit,
-    ]);
+    public function edit($id)
+    {
+        $inventory = Inventory::findOrFail($id);
 
-    session()->flash(
-        'success',
-        'Inventory berhasil diupdate'
-    );
-}
+        $this->inventoryId = $inventory->id;
 
-public function delete($id)
-{
-    Inventory::findOrFail($id)->delete();
+        $this->product_name = $inventory->product_name;
 
-    session()->flash(
-        'success',
-        'Inventory berhasil dihapus'
-    );
-}
+        $this->stock = $inventory->stock;
+
+        $this->unit = $inventory->unit;
+    }
+
+    public function update()
+    {
+        $this->validate();
+
+        Inventory::findOrFail(
+            $this->inventoryId
+        )->update([
+            'product_name' => $this->product_name,
+            'stock' => $this->stock,
+            'unit' => $this->unit,
+        ]);
+
+        $this->resetForm();
+
+        session()->flash(
+            'success',
+            'Inventory berhasil diupdate'
+        );
+    }
+
+    public function delete($id)
+    {
+        Inventory::findOrFail($id)->delete();
+
+        session()->flash(
+            'success',
+            'Inventory berhasil dihapus'
+        );
+    }
+
+    public function resetForm()
+    {
+        $this->reset([
+            'inventoryId',
+            'product_name',
+            'stock',
+            'unit',
+        ]);
+    }
 };
 
 ?>
 
-<div class="max-w-7xl mx-auto space-y-4">
+<div class="max-w-7xl mx-auto space-y-6">
 
     <flux:heading size="xl">
         Inventory
     </flux:heading>
 
-    <flux:subheading size="lg">
+    <flux:subheading>
         Manage Inventory
     </flux:subheading>
 
-    <flux:separator variant="subtle" />
+    <flux:separator />
 
     <div class="flex gap-3">
 
@@ -158,24 +165,9 @@ public function delete($id)
             placeholder="Search Product..."
         />
 
-        <flux:select
-            wire:model.live="stockFilter"
-            placeholder="Filter Stock"
+        <flux:modal.trigger
+            name="create-inventory"
         >
-            <flux:select.option value="">
-                All
-            </flux:select.option>
-
-            <flux:select.option value="available">
-                Available
-            </flux:select.option>
-
-            <flux:select.option value="empty">
-                Empty
-            </flux:select.option>
-        </flux:select>
-
-        <flux:modal.trigger name="create-inventory">
             <flux:button
                 variant="primary"
                 icon="plus"
@@ -186,8 +178,15 @@ public function delete($id)
 
     </div>
 
-  
-    <x-flash-message />
+    @if(session('success'))
+
+        <div class="text-green-600">
+
+            {{ session('success') }}
+
+        </div>
+
+    @endif
 
     <flux:table :paginate="$this->inventories">
 
@@ -195,8 +194,6 @@ public function delete($id)
 
             <flux:table.column
                 sortable
-                :sorted="$sortBy === 'product_name'"
-                :direction="$sortDirection"
                 wire:click="sort('product_name')"
             >
                 Product
@@ -212,24 +209,22 @@ public function delete($id)
 
             <flux:table.column
                 sortable
-                :sorted="$sortBy === 'created_at'"
-                :direction="$sortDirection"
                 wire:click="sort('created_at')"
             >
                 Created At
             </flux:table.column>
 
             <flux:table.column>
-
+                Action
             </flux:table.column>
 
         </flux:table.columns>
 
         <flux:table.rows>
 
-            @foreach ($this->inventories as $inventory)
+            @foreach($this->inventories as $inventory)
 
-                <flux:table.row :key="$inventory->id">
+                <flux:table.row>
 
                     <flux:table.cell>
                         {{ $inventory->product_name }}
@@ -263,39 +258,30 @@ public function delete($id)
 
                     <flux:table.cell>
 
-                        <flux:dropdown>
+                        <div class="flex gap-2">
 
-                            <flux:button
-                                variant="ghost"
-                                size="sm"
-                                icon="ellipsis-horizontal"
-                            />
+                            <flux:modal.trigger
+                                name="edit-inventory"
+                            >
 
-                            <flux:menu>
-
-                                <flux:menu.item
-                                    icon="pencil"
-                                    wire:click="
-                                        edit({{ $inventory->id }});
-                                        $flux.modal('edit-inventory').show()
-                                     "
+                                <flux:button
+                                    size="sm"
+                                    wire:click="edit({{ $inventory->id }})"
                                 >
                                     Edit
-                                </flux:menu.item>
+                                </flux:button>
 
-                                <flux:menu.separator />
+                            </flux:modal.trigger>
 
-                                <flux:menu.item
-                                    variant="danger"
-                                    icon="trash"
-                                    wire:click="delete({{ $inventory->id }})"
-                                >
-                                    Delete
-                                </flux:menu.item>
+                            <flux:button
+                                size="sm"
+                                variant="danger"
+                                wire:click="delete({{ $inventory->id }})"
+                            >
+                                Delete
+                            </flux:button>
 
-                            </flux:menu>
-
-                        </flux:dropdown>
+                        </div>
 
                     </flux:table.cell>
 
@@ -306,74 +292,79 @@ public function delete($id)
         </flux:table.rows>
 
     </flux:table>
-    <flux:modal name="edit-inventory">
 
-    <div class="space-y-4">
+    <flux:modal
+        name="create-inventory"
+    >
 
-        <flux:heading size="lg">
-            Edit Inventory
-        </flux:heading>
+        <div class="space-y-4">
 
-        <flux:input
-            wire:model="product_name"
-            label="Product Name"
-        />
+            <flux:heading>
+                Add Inventory
+            </flux:heading>
 
-        <flux:input
-            wire:model="stock"
-            type="number"
-            label="Stock"
-        />
+            <flux:input
+                wire:model="product_name"
+                label="Product Name"
+            />
 
-        <flux:input
-            wire:model="unit"
-            label="Unit"
-        />
+            <flux:input
+                wire:model="stock"
+                type="number"
+                label="Stock"
+            />
 
-        <flux:button
-            variant="primary"
-            wire:click="update"
-        >
-            Update
-        </flux:button>
+            <flux:input
+                wire:model="unit"
+                label="Unit"
+            />
 
-    </div>
+            <flux:button
+                variant="primary"
+                wire:click="save"
+            >
+                Save
+            </flux:button>
 
-</flux:modal>
+        </div>
 
-    <flux:modal name="create-inventory">
+    </flux:modal>
 
-    <div class="space-y-4">
+    <flux:modal
+        name="edit-inventory"
+    >
 
-        <flux:heading size="lg">
-            Add Inventory
-        </flux:heading>
+        <div class="space-y-4">
 
-        <flux:input
-            label="Product Name"
-            wire:model="product_name"
-        />
+            <flux:heading>
+                Edit Inventory
+            </flux:heading>
 
-        <flux:input
-            label="Stock"
-            type="number"
-            wire:model="stock"
-        />
+            <flux:input
+                wire:model="product_name"
+                label="Product Name"
+            />
 
-        <flux:input
-            label="Unit"
-            wire:model="unit"
-        />
+            <flux:input
+                wire:model="stock"
+                type="number"
+                label="Stock"
+            />
 
-        <flux:button
-            variant="primary"
-            wire:click="save"
-        >
-            Save
-        </flux:button>
+            <flux:input
+                wire:model="unit"
+                label="Unit"
+            />
 
-    </div>
+            <flux:button
+                variant="primary"
+                wire:click="update"
+            >
+                Update
+            </flux:button>
 
-</flux:modal>
+        </div>
+
+    </flux:modal>
 
 </div>

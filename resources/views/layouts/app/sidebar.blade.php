@@ -25,7 +25,7 @@
                     </flux:sidebar.item>
 
                     <flux:sidebar.item icon="home" :href="route('inventory.index')" :current="request()->routeIs('inventory.index')" wire:navigate>
-                        {{ __('inventory') }}
+                        {{ __('Inventory') }}
                     </flux:sidebar.item>
 
                 </flux:sidebar.group>
