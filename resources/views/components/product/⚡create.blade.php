@@ -57,21 +57,21 @@ new class extends Component
             </div>
 
             <flux:input
-                label="Product Name"
-                placeholder="Enter product name"
-                wire:model="form.product_name"
+                label="Product Code"
+                placeholder="Enter product code"
+                wire:model="form.product_code"
             />
 
             <flux:input
-                label="Category"
+                label="Category ID"
                 placeholder="Skincare, Makeup..."
-                wire:model="form.category"
+                wire:model="form.category_id"
             />
 
             <flux:input
-                label="Brand"
+                label="Name"
                 placeholder="Wardah, Emina..."
-                wire:model="form.brand"
+                wire:model="form.name"
             />
 
             <flux:input

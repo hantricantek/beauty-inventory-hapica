@@ -98,18 +98,18 @@ new class extends Component
             </div>
 
             <flux:input
-                label="Product Name"
-                wire:model="form.product_name"
+                label="Product Code"
+                wire:model="form.product_code"
             />
 
             <flux:input
-                label="Category"
-                wire:model="form.category"
+                label="Category ID"
+                wire:model="form.category_id"
             />
 
             <flux:input
-                label="Brand"
-                wire:model="form.brand"
+                label="Name"
+                wire:model="form.name"
             />
 
             <flux:input

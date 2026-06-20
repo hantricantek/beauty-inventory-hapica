@@ -18,7 +18,7 @@ new class extends Component
                 $this->search,
                 fn ($query) =>
                     $query->where(
-                        'product_name',
+                        'name',
                         'like',
                         '%' . $this->search . '%'
                     )
@@ -28,7 +28,7 @@ new class extends Component
                 $this->category,
                 fn ($query) =>
                     $query->where(
-                        'category',
+                        'category_id',
                         $this->category
                     )
             )
@@ -125,15 +125,15 @@ new class extends Component
             <flux:table.columns>
 
                 <flux:table.column>
-                    Product Name
+                    Product Code
                 </flux:table.column>
 
                 <flux:table.column>
-                    Category
+                    Category Id
                 </flux:table.column>
 
                 <flux:table.column>
-                    Brand
+                    Name
                 </flux:table.column>
 
                 <flux:table.column>
@@ -161,15 +161,15 @@ new class extends Component
                     <flux:table.row :key="$product->id">
 
                         <flux:table.cell>
-                            {{ $product->product_name }}
+                            {{ $product->product_code }}
                         </flux:table.cell>
 
                         <flux:table.cell>
-                            {{ $product->category }}
+                            {{ $product->category_id }}
                         </flux:table.cell>
 
                         <flux:table.cell>
-                            {{ $product->brand }}
+                            {{ $product->name }}
                         </flux:table.cell>
 
                         <flux:table.cell>
