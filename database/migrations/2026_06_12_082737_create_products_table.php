@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('category_id');
             $table->integer('stock');
             $table->decimal('price', 12, 2);
-            $table->enum('status', ['Available','Low Stock','Out of Stock']);
+            $table->date('expired_date');
             $table->timestamps();
         });
     }

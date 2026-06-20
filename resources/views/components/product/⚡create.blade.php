@@ -85,29 +85,11 @@ new class extends Component
                 label="Price"
                 wire:model="form.price"
             />
-
-            <flux:select
-                label="Status"
-                wire:model="form.status"
-            >
-
-                <option value="">
-                    Select Status
-                </option>
-
-                <option value="Available">
-                    Available
-                </option>
-
-                <option value="Low Stock">
-                    Low Stock
-                </option>
-
-                <option value="Out of Stock">
-                    Out of Stock
-                </option>
-
-            </flux:select>
+            <flux:input
+                type="date"
+                label="Expiration Date"
+                wire:model="form.expired_date"
+            />
 
             <div class="flex justify-end gap-3">
 

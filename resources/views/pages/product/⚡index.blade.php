@@ -125,6 +125,10 @@ new class extends Component
             <flux:table.columns>
 
                 <flux:table.column>
+                    No
+                </flux:table.column>
+
+                <flux:table.column>
                     Product Code
                 </flux:table.column>
 
@@ -145,20 +149,21 @@ new class extends Component
                 </flux:table.column>
 
                 <flux:table.column>
-                    Status
+                    Expired Date
                 </flux:table.column>
 
-                <flux:table.column>
-                    Action
-                </flux:table.column>
 
             </flux:table.columns>
 
             <flux:table.rows>
 
-                @foreach ($this->products as $product)
+                @foreach ($this->products as $index => $product)
 
                     <flux:table.row :key="$product->id">
+
+                        <flux:table.cell>
+                            {{ $index + 1 }}
+                        </flux:table.cell>
 
                         <flux:table.cell>
                             {{ $product->product_code }}
@@ -181,30 +186,11 @@ new class extends Component
                         </flux:table.cell>
 
                         <flux:table.cell>
-                            {{ $product->status }}
+                            {{ $product->expired_date }}
                         </flux:table.cell>
 
                         <flux:table.cell>
 
-                            @if ($product->status == 'Available')
-
-                                <span class="px-2 py-1 text-xs font-semibold rounded bg-green-100 text-green-700">
-                                    Available
-                                </span>
-
-                            @elseif ($product->status == 'Low Stock')
-
-                                <span class="px-2 py-1 text-xs font-semibold rounded bg-yellow-100 text-yellow-700">
-                                    Low Stock
-                                </span>
-
-                            @else
-
-                                <span class="px-2 py-1 text-xs font-semibold rounded bg-red-100 text-red-700">
-                                    Out of Stock
-                                </span>
-
-                            @endif
 
                         </flux:table.cell>
 

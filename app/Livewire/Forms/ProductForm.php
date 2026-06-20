@@ -12,7 +12,7 @@ class ProductForm extends Form
     public string $category_id = '';
     public int $stock = 0;
     public string $price = '';
-    public string $status = '';
+    public string $expired_date = '';
 
     public ?Product $product = null;
 
@@ -24,7 +24,7 @@ class ProductForm extends Form
             'category_id' => 'required',
             'stock' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0',
-            'status' => 'required',
+            'expired_date' => 'required|date',
         ];
     }
 
@@ -38,7 +38,7 @@ class ProductForm extends Form
             'category_id' => $this->category_id,
             'stock' => $this->stock,
             'price' => $this->price,
-            'status' => $this->status,
+            'expired_date' => $this->expired_date,
         ]);
 
         $this->reset();
@@ -53,7 +53,7 @@ class ProductForm extends Form
         $this->category_id = $product->category_id;
         $this->stock = $product->stock;
         $this->price = $product->price;
-        $this->status = $product->status;
+        $this->expired_date = $product->expired_date;
     }
 
     public function update()
@@ -66,7 +66,7 @@ class ProductForm extends Form
             'category_id' => $this->category_id,
             'stock' => $this->stock,
             'price' => $this->price,
-            'status' => $this->status,
+            'expired_date' => $this->expired_date,
         ]);
     }
 

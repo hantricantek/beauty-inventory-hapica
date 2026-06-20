@@ -12,7 +12,7 @@ class Product extends Model
         'name',
         'stock',
         'price',
-        'status',
+        'expired_date',
     ];
 
     // Relasi ke tabel stock_ins
