@@ -9,7 +9,7 @@ use App\Models\Category;
 new class extends Component {
     use WithPagination;
 
-    #[Url(history: true)]
+    #[Url]
     public $search = '';
 
     public $sortBy = 'id';
@@ -32,12 +32,6 @@ new class extends Component {
             $this->sortBy = $column;
             $this->sortDirection = 'asc';
         }
-    }
-
-    public function resetSearch()
-    {
-        $this->reset('search');
-        $this->resetPage();
     }
 
     #[Computed]
@@ -157,7 +151,7 @@ new class extends Component {
 
         <flux:button
             variant="outline"
-            wire:click="resetSearch">
+            x-on:click="$wire.set('search', ''); $wire.resetPage();">
             All Categories
         </flux:button>
     </div>
