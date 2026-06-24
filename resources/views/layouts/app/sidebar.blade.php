@@ -20,15 +20,15 @@
                         {{ __('Category') }}
                     </flux:sidebar.item>
                     
-                    <flux:sidebar.item icon="home" :href="route('product.index')" :current="request()->routeIs('product.index')" wire:navigate>
+                   <flux:sidebar.item icon="cube" :href="route('product.index')" :current="request()->routeIs('product.index')" wire:navigate>
                         {{ __('Products') }}
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="home" :href="route('supplier.index')" :current="request()->routeIs('supplier.index')" wire:navigate>
+                    <flux:sidebar.item icon="truck" :href="route('supplier.index')" :current="request()->routeIs('supplier.index')" wire:navigate>
                         {{ __('Supplier') }}
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="home" :href="route('inventory.index')" :current="request()->routeIs('inventory.index')" wire:navigate>
+                    <flux:sidebar.item icon="clipboard-document-check" :href="route('inventory.index')" :current="request()->routeIs('inventory.index')" wire:navigate>
                         {{ __('Inventory') }}
                     </flux:sidebar.item>
 
