@@ -19,9 +19,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
          ->middleware(['auth'])
          ->name('supplier.index');
 
-    Route::livewire('/inventory', 'pages::inventory.index')
-        ->middleware(['auth'])
-        ->name('inventory.index');
+    Route::livewire('/users', 'pages::user.index')
+    ->middleware(['auth', 'verified'])
+    ->name('user.index');
 
 
 });

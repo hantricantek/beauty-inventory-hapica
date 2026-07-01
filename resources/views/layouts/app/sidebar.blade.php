@@ -28,9 +28,9 @@
                         {{ __('Supplier') }}
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="clipboard-document-check" :href="route('inventory.index')" :current="request()->routeIs('inventory.index')" wire:navigate>
-                        {{ __('Inventory') }}
-                    </flux:sidebar.item>
+                   <flux:sidebar.item icon="users" :href="route('user.index')" :current="request()->routeIs('user.index')" wire:navigate>
+                         {{ __('Users') }}
+                   </flux:sidebar.item>
 
                 </flux:sidebar.group>
             </flux:sidebar.nav>
